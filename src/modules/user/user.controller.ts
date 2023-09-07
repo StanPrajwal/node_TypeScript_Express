@@ -6,14 +6,14 @@ import {
 } from "./user.services";
 import { createResponse } from "../../shared/appResponse.shared";
 import httpStatus = require("http-status");
-import { UNAUTHORIZED } from "../share/ErrorMessage.shared";
+import { UNAUTHORIZED } from "../../shared/ErrorMessage.shared";
 const userRegister = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const registerRes = await userRegisterSvc(req.body);
-  res.json({
+  res.status(registerRes.code).json({
     registerRes,
   });
 };
@@ -23,26 +23,15 @@ const updateUserDetail = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const authHeader = req.headers["authorization"];
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    // console.log(token)
-    const updateRes = await updateUserDetailSvc({ ...req.body, id, token });
-    if (updateRes.code) {
-      res.status(updateRes.code).json({
-        updateRes,
-      });
-    }
-  }
-  else {
-    const noToken = createResponse(
-      httpStatus.UNAUTHORIZED,
-      UNAUTHORIZED
-    );
-
-    res.status(noToken.code).json(noToken);
+  const updateRes = await updateUserDetailSvc({ ...req.body, id });
+  if (updateRes.code) {
+    res.status(updateRes.code).json({
+      updateRes,
+    });
   }
 };
+
+
 const deleteUserAct = async (
   req: Request,
   res: Response,
@@ -60,10 +49,7 @@ const deleteUserAct = async (
       });
     }
   } else {
-    const noToken = createResponse(
-      httpStatus.UNAUTHORIZED,
-      UNAUTHORIZED
-    );
+    const noToken = createResponse(httpStatus.UNAUTHORIZED, UNAUTHORIZED);
 
     res.status(noToken.code).json(noToken);
   }

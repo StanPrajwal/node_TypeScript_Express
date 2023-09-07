@@ -4,6 +4,7 @@ import { AppResponse } from "../../shared/appResponse.shared";
 
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   const loginRes = await loginSvc(req.body);
+  console.log(loginRes,"controller")
   if(loginRes?.code){
     res.status(loginRes.code).json(
         loginRes,

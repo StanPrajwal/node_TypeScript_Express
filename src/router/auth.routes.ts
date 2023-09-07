@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { userLogin } from "../modules/auth/auth.controller";
+import { loginValidation } from "../util/FieldValidation.util";
 const router = Router();
 
-router.post('/login',userLogin)
+router.post('/login',loginValidation,userLogin)
+router.patch('/logout')
 
 export default router;
 
@@ -10,15 +12,3 @@ export default router;
 
 
 
-// import {
-//   createProduct,
-//   deleteByID,
-//   getAllProducts,
-//   updateProduct,
-// } from "../services/productServices";
-
-
-// router.post("/addproduct", createProduct);
-// router.get("/getall", getAllProducts);
-// router.put("/update/:id", updateProduct);
-// router.delete("/remove/:id", deleteByID);
